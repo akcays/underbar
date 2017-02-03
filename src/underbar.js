@@ -356,12 +356,13 @@
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
-    var arrays = Array.from(arguments);
   };
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    var rest = _.flatten([...arguments].slice(1));
+    return _.filter(array, ele => _.indexOf(rest, ele) === -1);
   };
 
   // Returns a function, that, when invoked, will only be triggered at most once
