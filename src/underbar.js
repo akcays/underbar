@@ -173,11 +173,8 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
-    var callback = iterator || _.identity;
-    return _.reduce(collection, function(doesPass, item) {
-      if (callback(item)) doesPass = true;
-      return doesPass;
-    }, false);    
+    iterator = iterator || _.identity;
+    return !_.every(collection, ele => !iterator(ele));   
   };
 
 
@@ -320,6 +317,22 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+    var sort = function(collection) {
+      var sorted = false;
+      while (!sorted) {
+        sorted = true;
+        for (var i = 1; i < collection.length; i++) {
+          if (collection[i-1][iterator] > collection[i][iterator]) {
+            sorted = false;
+            var temp = collection[i-1][iterator];
+            collection[i-1][iterator] = collection[i][iterator];
+            collection[i-1][iterator] = temp;
+          }  
+        }
+      }
+      return collection;
+    }
+
   };
 
   // Zip together two or more arrays with elements of the same index
